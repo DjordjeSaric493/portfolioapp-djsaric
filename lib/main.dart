@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:portfolioapp_test/state_mgmt_provider/current_app_state_provider.dart';
 import 'package:portfolioapp_test/ui/homepage.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(const MainApp());
@@ -10,8 +12,13 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: HomePage(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => CurrentAppState()),
+      ],
+      child: const MaterialApp(
+        home: HomePage(),
+      ),
     );
   }
 }
