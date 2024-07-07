@@ -18,6 +18,6 @@ class CurrentAppState extends ChangeNotifier {
 
   void changeGradient(int index) {
     selectedButton = index;
-    notifyListeners(); //it only took me 24 mins to figure out i forgot to write this
+    notifyListeners();
   }
 }

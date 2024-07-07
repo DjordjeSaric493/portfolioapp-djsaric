@@ -4,9 +4,13 @@ import 'package:device_frame/device_frame.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:portfolioapp_test/model/emu_device_model.dart';
 import 'package:portfolioapp_test/state_mgmt_provider/current_app_state_provider.dart';
 import 'package:portfolioapp_test/ui/widgets/glassy_container.dart';
-import 'package:portfolioapp_test/utils/data_const.dart';
+import 'package:portfolioapp_test/utils/data_constants/app_data.dart';
+import 'package:portfolioapp_test/utils/data_constants/color_pickers_data.dart';
+import 'package:portfolioapp_test/utils/data_constants/emu_device_data.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
@@ -80,18 +84,81 @@ class HomePage extends StatelessWidget {
                       child: Consumer<CurrentAppState>(
                         builder: (context, currentAppState, child) {
                           return DeviceFrame(
-                            device: currentAppState
-                                .currentEmuDevice, // Show current device on UI
-                            screen: const Center(
-                              child: Text(
-                                "Jel radi?",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 50,
+                              device: currentAppState
+                                  .currentEmuDevice, // Show current device on UI
+                              screen: Container(
+                                decoration: BoxDecoration(
+                                  gradient: fancyColorPalette[
+                                          currentAppState.selectedButton]
+                                      .gradient,
                                 ),
-                              ),
-                            ),
-                          );
+                                child: Wrap(
+                                  spacing:
+                                      16.0, // horizontal space between buttons
+                                  runSpacing:
+                                      16.0, // vertical space between buttons
+                                  alignment: WrapAlignment.center,
+                                  children: [
+                                    ...List.generate(
+                                      apps.length,
+                                      (index) => Container(
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                            right: 12,
+                                            left: 12,
+                                            top: 32,
+                                            bottom: 12,
+                                          ),
+                                          child: Column(
+                                            children: [
+                                              CustomButton(
+                                                //TODO:button press lgic
+                                                onPressed: () {},
+                                                width: 50,
+                                                height: 50,
+                                                backgroundColor:
+                                                    apps[index].color,
+                                                child: Center(
+                                                  child: apps[index].iconData !=
+                                                          null
+                                                      ? apps[index]
+                                                                  .iconData!
+                                                                  .flutterIcon !=
+                                                              null
+                                                          ? Icon(apps[index]
+                                                              .iconData!
+                                                              .flutterIcon)
+                                                          : FaIcon(apps[index]
+                                                              .iconData!
+                                                              .fontAwesomeIcon)
+                                                      : Container(),
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                width: 70,
+                                                child: Center(
+                                                  child: Text(
+                                                    apps[index].title,
+                                                    overflow: TextOverflow.fade,
+                                                    maxLines: 1,
+                                                    style: GoogleFonts
+                                                        .openSansCondensed(
+                                                            fontSize: 11,
+                                                            color: Colors.white,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w600),
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ));
                         },
                       ),
                     ),

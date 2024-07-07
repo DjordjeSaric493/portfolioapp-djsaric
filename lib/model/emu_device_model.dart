@@ -2,7 +2,7 @@
 //TODO: go to homepage.dart, click on DeviceFrame, see what final variables can be used
 import 'package:device_frame/device_frame.dart';
 import 'package:flutter/material.dart';
-import 'package:portfolioapp_test/utils/data_const.dart';
+import 'package:portfolioapp_test/utils/data_constants/emu_device_data.dart';
 
 class EmuDeviceModel {
   DeviceInfo device; //emulated device we are using
