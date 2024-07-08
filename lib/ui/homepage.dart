@@ -1,20 +1,65 @@
-import 'dart:ui';
-import 'package:custom_button_builder/custom_button_builder.dart';
-import 'package:device_frame/device_frame.dart';
+import 'dart:async'; // Import for Timer
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:portfolioapp_test/ui/widgets/glassy_container.dart';
+import 'package:portfolioapp_test/utils/data_constants/color_pickers_data.dart';
+import 'package:provider/provider.dart';
 import 'package:portfolioapp_test/model/emu_device_model.dart';
 import 'package:portfolioapp_test/state_mgmt_provider/current_app_state_provider.dart';
-import 'package:portfolioapp_test/ui/widgets/glassy_container.dart';
-import 'package:portfolioapp_test/utils/data_constants/app_data.dart';
-import 'package:portfolioapp_test/utils/data_constants/color_pickers_data.dart';
 import 'package:portfolioapp_test/utils/data_constants/emu_device_data.dart';
-import 'package:provider/provider.dart';
+import 'package:portfolioapp_test/utils/phone_scr_wrap.dart';
+import 'package:portfolioapp_test/ui/screens/phone_home_scr.dart';
+import 'package:custom_button_builder/custom_button_builder.dart';
+import 'package:device_frame/device_frame.dart';
+import 'package:url_launcher/url_launcher.dart'; // Add this import for URL launching
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  late Timer _timer;
+  late String _timeString;
+
+  @override
+  void initState() {
+    super.initState();
+    _timeString = _formatDateTime(DateTime.now());
+    _timer =
+        Timer.periodic(const Duration(seconds: 1), (Timer t) => _getTime());
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  void _getTime() {
+    final DateTime now = DateTime.now();
+    final String formattedDateTime = _formatDateTime(now);
+    setState(() {
+      _timeString = formattedDateTime;
+    });
+  }
+
+  String _formatDateTime(DateTime dateTime) {
+    return "${dateTime.day}/${dateTime.month}/${dateTime.year} ${dateTime.hour}:${dateTime.minute}:${dateTime.second}";
+  }
+
+  Future<void> launchUrlInBrowser(String link) async {
+    Uri url = Uri.parse(link);
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url, mode: LaunchMode.externalApplication);
+    } else {
+      print("something messed up :(");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,11 +70,11 @@ class HomePage extends StatelessWidget {
       body: Container(
         child: Stack(
           children: [
+            // Background gradient
             Selector<CurrentAppState, int>(
               selector: (context, provider) => provider.selectedButton,
               builder: (context, _, __) {
-                return // That nice looking linear gradient in the background
-                    Container(
+                return Container(
                   decoration: BoxDecoration(
                       gradient:
                           fancyColorPalette[currentAppState.selectedButton]
@@ -37,6 +82,7 @@ class HomePage extends StatelessWidget {
                 );
               },
             ),
+            // SVG Image overlay
             Selector<CurrentAppState, int>(
               selector: (context, provider) => provider.selectedButton,
               builder: (context, _, __) {
@@ -47,139 +93,92 @@ class HomePage extends StatelessWidget {
                 );
               },
             ),
-            // After that we have .svg image on top of gradient
-
-            // On svg we added row with device frame and other stuff
+            // Layout columns for left, middle (device frame), and right panels
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              // 2 blank spaces and device are inside of this column
               children: [
                 const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    //LEFT
-                    const Column(
+                    // Left panel
+                    Column(
                       children: [
-                        //top left
+                        /* // Top left GlassyContainer with Flutter link
                         GlassyContainer(
                           width: 250,
                           height: 400,
-                        ),
-                        SizedBox(
+                          childGrad: Align(
+                            alignment: Alignment.center,
+                            child: GestureDetector(
+                              onTap: () =>
+                                  launchUrlInBrowser('https://flutter.dev/'),
+                              child: SvgPicture.asset(
+                                'assets/images/flutterlogo.svg',
+                                width: 100, // Adjust the width as needed
+                                height: 100, // Adjust the height as needed
+                                semanticsLabel: 'Flutter Logo',
+                              ),
+                            ),
+                          ),
+                        ),*/
+
+                        const SizedBox(
                           height: 25,
                           width: 20,
                         ),
-                        //bottomleft
+                        // Bottom left GlassyContainer with date and time display
                         GlassyContainer(
                           width: 245,
                           height: 200,
+                          childGrad: Center(
+                            child: Text(
+                              _timeString,
+                              style: GoogleFonts.inter(
+                                fontSize: 20,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
                         ),
                       ],
                     ),
-                    //MIDDLE
+                    // Middle panel with device frame and screen
                     SizedBox(
                       height: size.height - 70,
-                      // note to myself use provider inside of consumer widget
                       child: Consumer<CurrentAppState>(
                         builder: (context, currentAppState, child) {
                           return DeviceFrame(
-                              device: currentAppState
-                                  .currentEmuDevice, // Show current device on UI
-                              screen: Container(
-                                decoration: BoxDecoration(
-                                  gradient: fancyColorPalette[
-                                          currentAppState.selectedButton]
-                                      .gradient,
-                                ),
-                                child: Wrap(
-                                  spacing:
-                                      16.0, // horizontal space between buttons
-                                  runSpacing:
-                                      16.0, // vertical space between buttons
-                                  alignment: WrapAlignment.center,
-                                  children: [
-                                    ...List.generate(
-                                      apps.length,
-                                      (index) => Container(
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(
-                                            right: 12,
-                                            left: 12,
-                                            top: 32,
-                                            bottom: 12,
-                                          ),
-                                          child: Column(
-                                            children: [
-                                              CustomButton(
-                                                //TODO:button press lgic
-                                                onPressed: () {},
-                                                width: 50,
-                                                height: 50,
-                                                backgroundColor:
-                                                    apps[index].color,
-                                                child: Center(
-                                                  child: apps[index].iconData !=
-                                                          null
-                                                      ? apps[index]
-                                                                  .iconData!
-                                                                  .flutterIcon !=
-                                                              null
-                                                          ? Icon(apps[index]
-                                                              .iconData!
-                                                              .flutterIcon)
-                                                          : FaIcon(apps[index]
-                                                              .iconData!
-                                                              .fontAwesomeIcon)
-                                                      : Container(),
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                width: 70,
-                                                child: Center(
-                                                  child: Text(
-                                                    apps[index].title,
-                                                    overflow: TextOverflow.fade,
-                                                    maxLines: 1,
-                                                    style: GoogleFonts
-                                                        .openSansCondensed(
-                                                            fontSize: 11,
-                                                            color: Colors.white,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w600),
-                                                  ),
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ));
+                            device: currentAppState.currentEmuDevice,
+                            screen: Container(
+                              decoration: BoxDecoration(
+                                gradient: fancyColorPalette[
+                                        currentAppState.selectedButton]
+                                    .gradient,
+                              ),
+                              child: ScreenWrapper(
+                                childG: currentAppState.currentScreen,
+                              ),
+                            ),
+                          );
                         },
                       ),
                     ),
-                    //RIGHT
+                    // Right panel
                     Column(
                       children: [
-                        //UPPER RIGHT
+                        // Upper right GlassyContainer
                         GlassyContainer(
                           width: 250,
                           height: 230,
                           childGrad: Center(
-                            //center these BUTT-ons lol
                             child: Wrap(
-                              //to achieve responsivity,
                               children: [
+                                // Custom buttons for gradient selection
                                 ...List.generate(
                                   fancyColorPalette.length,
                                   (index) => CustomButton(
                                     margin: EdgeInsets.all(11),
-
-                                    //button press logic
                                     onPressed: () {
                                       currentAppState.changeGradient(index);
                                     },
@@ -197,11 +196,12 @@ class HomePage extends StatelessWidget {
                             ),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 25,
                           width: 40,
                         ),
-                        GlassyContainer(
+                        // Bottom right GlassyContainer
+                        const GlassyContainer(
                           width: 245,
                           height: 200,
                         ),
@@ -210,24 +210,22 @@ class HomePage extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 10),
+                // Row for device selection icons
                 Row(
-                  // Put icons inside a row
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    // Generate a list of CustomButton widgets for each item in emudevices, with onPressed callbacks
+                    // Generate icons for each device in emudevices
                     ...List.generate(
                       emudevices.length,
                       (index) => Consumer<CurrentAppState>(
                         builder: (context, currentAppState, child) {
                           return CustomButton(
-                            // Expected behavior -> change device on pressing icon
                             onPressed: () {
                               currentAppState.changeSelectedEmuDevice(
                                 emudevices[index].device,
                               );
                             },
-                            height:
-                                40, // To avoid assertion error while animate:true pass width and height
+                            height: 40,
                             width: 40,
                             borderRadius: 90,
                             animate: true,
@@ -237,7 +235,6 @@ class HomePage extends StatelessWidget {
                                 : Pressed.notPressed,
                             shadowColor: Colors.white,
                             isThreeD: true,
-                            // Here makes conditional if its icon from flutterIcon or FontAwesome
                             child: emudevices[index].data.flutterIcon != null
                                 ? Icon(emudevices[index].data.flutterIcon)
                                 : FaIcon(
