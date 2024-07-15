@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:portfolioapp_test/state_mgmt_provider/theme_provider.dart';
 import 'package:portfolioapp_test/ui/widgets/glassy_container.dart';
 import 'package:portfolioapp_test/utils/data_constants/color_pickers_data.dart';
 import 'package:provider/provider.dart';
@@ -63,9 +64,21 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeProvider theme = Provider.of<ThemeProvider>(context, listen: false);
     CurrentAppState currentAppState =
         Provider.of<CurrentAppState>(context, listen: false);
     Size size = MediaQuery.of(context).size; // size of device to get responsive
+    //see theme_provider for detailed explanation
+    theme.size = MediaQuery.of(context).size;
+    theme.widthRatio = theme.size.width / baseWidth;
+    theme.heightRatio = theme.size.height / baseHeight;
+    //if it's smaller width I guess it's phone
+    //in order to achieve responsiveness, I'll use this bool as a flag
+    bool phone = false;
+    if (size.width < 800) {
+      phone = true;
+    }
+
     return Scaffold(
       body: Container(
         child: Stack(
@@ -102,47 +115,51 @@ class _HomePageState extends State<HomePage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     // Left panel
-                    Column(
-                      children: [
-                        /* // Top left GlassyContainer with Flutter link
-                        GlassyContainer(
-                          width: 250,
-                          height: 400,
-                          childGrad: Align(
-                            alignment: Alignment.center,
-                            child: GestureDetector(
-                              onTap: () =>
-                                  launchUrlInBrowser('https://flutter.dev/'),
-                              child: SvgPicture.asset(
-                                'assets/images/flutterlogo.svg',
-                                width: 100, // Adjust the width as needed
-                                height: 100, // Adjust the height as needed
-                                semanticsLabel: 'Flutter Logo',
-                              ),
-                            ),
-                          ),
-                        ),*/
+                    // Conditionally renders an empty container on phones or a column on larger devices.
+                    phone
+                        ? Container()
+                        : Column(
+                            children: [
+                              // Top left GlassyContainer with Flutter link
+                              /* GlassyContainer(
+                                width: 250,
+                                height: 400,
+                                childGrad: Align(
+                                  alignment: Alignment.center,
+                                  child: GestureDetector(
+                                    onTap: () => launchUrlInBrowser(
+                                        'https://flutter.dev/'),
+                                    child: SvgPicture.asset(
+                                      'assets/images/flutterlogo.svg',
+                                      width: 100, // Adjust the width as needed
+                                      height:
+                                          100, // Adjust the height as needed
+                                      semanticsLabel: 'Flutter Logo',
+                                    ),
+                                  ),
+                                ),
+                              ),*/
 
-                        const SizedBox(
-                          height: 25,
-                          width: 20,
-                        ),
-                        // Bottom left GlassyContainer with date and time display
-                        GlassyContainer(
-                          width: 245,
-                          height: 200,
-                          childGrad: Center(
-                            child: Text(
-                              _timeString,
-                              style: GoogleFonts.inter(
-                                fontSize: 20,
-                                color: Colors.white,
+                              const SizedBox(
+                                height: 25,
+                                width: 20,
                               ),
-                            ),
+                              // Bottom left GlassyContainer with date and time display
+                              GlassyContainer(
+                                width: 245,
+                                height: 200,
+                                childGrad: Center(
+                                  child: Text(
+                                    _timeString,
+                                    style: GoogleFonts.inter(
+                                      fontSize: 20,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                      ],
-                    ),
                     // Middle panel with device frame and screen
                     SizedBox(
                       height: size.height - 70,
@@ -165,48 +182,52 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     // Right panel
-                    Column(
-                      children: [
-                        // Upper right GlassyContainer
-                        GlassyContainer(
-                          width: 250,
-                          height: 230,
-                          childGrad: Center(
-                            child: Wrap(
-                              children: [
-                                // Custom buttons for gradient selection
-                                ...List.generate(
-                                  fancyColorPalette.length,
-                                  (index) => CustomButton(
-                                    margin: EdgeInsets.all(11),
-                                    onPressed: () {
-                                      currentAppState.changeGradient(index);
-                                    },
-                                    animate: true,
-                                    isThreeD: true,
-                                    borderRadius: 80,
-                                    height: 60,
-                                    width: 60,
-                                    shadowColor: Colors.black,
-                                    backgroundColor:
-                                        fancyColorPalette[index].color,
+                    phone
+                        ? Container()
+                        : //conditional rendering
+                        Column(
+                            children: [
+                              // Upper right GlassyContainer
+                              GlassyContainer(
+                                width: 250,
+                                height: 230,
+                                childGrad: Center(
+                                  child: Wrap(
+                                    children: [
+                                      // Custom buttons for gradient selection
+                                      ...List.generate(
+                                        fancyColorPalette.length,
+                                        (index) => CustomButton(
+                                          margin: EdgeInsets.all(11),
+                                          onPressed: () {
+                                            currentAppState
+                                                .changeGradient(index);
+                                          },
+                                          animate: true,
+                                          isThreeD: true,
+                                          borderRadius: 80,
+                                          height: 60,
+                                          width: 60,
+                                          shadowColor: Colors.black,
+                                          backgroundColor:
+                                              fancyColorPalette[index].color,
+                                        ),
+                                      )
+                                    ],
                                   ),
-                                )
-                              ],
-                            ),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 25,
+                                width: 40,
+                              ),
+                              // Bottom right GlassyContainer
+                              const GlassyContainer(
+                                width: 245,
+                                height: 200,
+                              ),
+                            ],
                           ),
-                        ),
-                        const SizedBox(
-                          height: 25,
-                          width: 40,
-                        ),
-                        // Bottom right GlassyContainer
-                        const GlassyContainer(
-                          width: 245,
-                          height: 200,
-                        ),
-                      ],
-                    ),
                   ],
                 ),
                 const SizedBox(height: 10),

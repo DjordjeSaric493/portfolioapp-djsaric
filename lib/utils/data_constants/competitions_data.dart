@@ -5,9 +5,41 @@ import 'package:flutter/gestures.dart';
 
 final List<MyCompetition> myCompetitions = [
   MyCompetition(
+    title: "Fonis C2S Tech Challenge",
+    organization: "FONIS-FON",
+    date: "May 2023",
+    bulletPoints: [
+      TextSpan(
+        text: "Solved case study by Adacta",
+      ),
+      TextSpan(
+        text: "1st place",
+        style: TextStyle(
+          color: Colors.blue,
+          decoration: TextDecoration.underline,
+        ),
+        recognizer: TapGestureRecognizer()
+          ..onTap = () {
+            launchUrlInBrowser(
+                'https://www.instagram.com/p/Csg8eu8Mx-gtKdUqhBy1cBfxa-4ocwq7GSR2sc0/');
+          },
+      ),
+      TextSpan(
+        text:
+            "First competition after a hiatus, successfully regaining confidence to pitch, small but important comeback.",
+      ),
+      TextSpan(
+        text:
+            "Interesting case study about IoT devices in automotive industry.",
+      ),
+    ],
+    location: "Belgrade, Serbia",
+    color: Colors.red,
+  ),
+  MyCompetition(
     title: "Raising Starts 2022",
     organization: "Startup Competition",
-    date: "July 2021",
+    date: "May 2022",
     bulletPoints: [
       TextSpan(
         text: "One of selected teams to pass further ",
@@ -26,11 +58,11 @@ final List<MyCompetition> myCompetitions = [
       ),
       TextSpan(
         text:
-            ". Mentorships, connecting with staartups, working further on prototype,tracking progress.",
+            "Mentorships, connecting with staartups, working further on prototype,tracking progress.",
       ),
       TextSpan(
         text:
-            " This was a peak moment for our student startup, eternally grateful to NTP Beograd for this amazing ride.",
+            "This was a peak moment for our student startup, eternally grateful to NTP Beograd for this amazing ride.",
       ),
     ],
     location: "Belgrade, Serbia",
@@ -58,10 +90,10 @@ final List<MyCompetition> myCompetitions = [
       ),
       TextSpan(
         text:
-            "Continued mentorships, working on proof of concept, analysing market. ",
+            "Continued mentorships, working on proof of concept, analysing market.",
       ),
       TextSpan(
-        text: "Very valuable experience for professional and personal growth",
+        text: "Very valuable experience for professional and personal growth.",
       ),
     ],
     location: "Belgrade, Serbia",
@@ -89,17 +121,16 @@ final List<MyCompetition> myCompetitions = [
       ),
       TextSpan(
         text:
-            ". My roles included development and team leading, monitoring team activities, project management, developing MVP using Google Maps and Firebase, pitching, mentorship sessions, and business education.",
+            "My roles included development and team leading, monitoring team activities, project management,\nDeveloping MVP using Google Maps and Firebase, pitching, mentorship sessions, and business education.",
       ),
       TextSpan(
         text:
-            " This was a pivotal moment in my career development and my first contact with Flutter technology.",
+            "This was a pivotal moment in my career development and my first contact with Flutter technology.",
       ),
     ],
     location: "Belgrade, Serbia",
     color: Colors.blueAccent,
   ),
-  // Add more competitions as needed
 ];
 
 Future<void> launchUrlInBrowser(String link) async {

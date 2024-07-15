@@ -47,7 +47,7 @@ class PhoneHomeScr extends StatelessWidget {
                           // Change the screen within the app
                           currentAppState.changePhoneScreen(
                               apps[index].screen!, false,
-                              titlee: apps[index].title);
+                              tit: apps[index].title);
                         }
                       },
                       width: 45, // Ensure consistent width

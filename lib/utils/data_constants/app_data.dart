@@ -29,7 +29,7 @@ List<AppsModel> apps = [
       screen: const Education()),
   AppsModel(
       title: "Experience",
-      color: Colors.white,
+      color: Colors.white70,
       iconData: CustomIconData(fontAwesomeIcon: FontAwesomeIcons.idBadge),
       screen: const Experience()),
   AppsModel(

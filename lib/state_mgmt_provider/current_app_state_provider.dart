@@ -37,8 +37,8 @@ class CurrentAppState extends ChangeNotifier {
     }
   }
 
-  void changePhoneScreen(Widget change, bool isMain, {String? titlee}) {
-    title = titlee;
+  void changePhoneScreen(Widget change, bool isMain, {String? tit}) {
+    title = tit;
     currentScreen = change;
     isHomeScr = isMain; // Ensure this line correctly assigns the value
     notifyListeners();
