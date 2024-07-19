@@ -1,4 +1,6 @@
-import 'dart:async'; // Import for Timer
+import 'dart:async';
+import 'dart:html' as html;
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -14,7 +16,8 @@ import 'package:portfolioapp_test/utils/phone_scr_wrap.dart';
 import 'package:portfolioapp_test/ui/screens/phone_home_scr.dart';
 import 'package:custom_button_builder/custom_button_builder.dart';
 import 'package:device_frame/device_frame.dart';
-import 'package:url_launcher/url_launcher.dart'; // Add this import for URL launching
+import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -33,6 +36,20 @@ class _HomePageState extends State<HomePage> {
     _timeString = _formatDateTime(DateTime.now());
     _timer =
         Timer.periodic(const Duration(seconds: 1), (Timer t) => _getTime());
+
+    // Register the iframe for Deezer playlist
+    //ignore: undefined_prefixed_name
+    ui.platformViewRegistry.registerViewFactory(
+      'deezer-player',
+      (int viewId) => html.IFrameElement()
+        ..src = 'https://widget.deezer.com/widget/dark/playlist/12883344503'
+        ..style.border = 'none'
+        ..style.width = '100%'
+        ..style.height = '350px'
+        ..attributes['frameborder'] = '0'
+        ..attributes['allowtransparency'] = 'true'
+        ..attributes['allow'] = 'encrypted-media; clipboard-write',
+    );
   }
 
   @override
@@ -120,25 +137,13 @@ class _HomePageState extends State<HomePage> {
                         ? Container()
                         : Column(
                             children: [
-                              // Top left GlassyContainer with Flutter link
-                              /* GlassyContainer(
-                                width: 250,
-                                height: 400,
-                                childGrad: Align(
-                                  alignment: Alignment.center,
-                                  child: GestureDetector(
-                                    onTap: () => launchUrlInBrowser(
-                                        'https://flutter.dev/'),
-                                    child: SvgPicture.asset(
-                                      'assets/images/flutterlogo.svg',
-                                      width: 100, // Adjust the width as needed
-                                      height:
-                                          100, // Adjust the height as needed
-                                      semanticsLabel: 'Flutter Logo',
-                                    ),
-                                  ),
+                              GlassyContainer(
+                                width: 240,
+                                height: 350,
+                                childGrad: HtmlElementView(
+                                  viewType: 'deezer-player',
                                 ),
-                              ),*/
+                              ),
 
                               const SizedBox(
                                 height: 25,
