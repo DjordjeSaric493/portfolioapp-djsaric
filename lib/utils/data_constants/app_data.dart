@@ -55,7 +55,7 @@ List<AppsModel> apps = [
   AppsModel(
       title: "Pong",
       color: Colors.white70,
-      iconData: CustomIconData(flutterIcon: FontAwesomeIcons.gamepad),
+      iconData: CustomIconData(flutterIcon: Icons.gamepad_outlined),
       screen: PongGame()),
 ];
 

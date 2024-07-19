@@ -1,4 +1,7 @@
+import 'dart:html' as html;
+import 'dart:ui' as ui; // Ensure this is here
 import 'package:flutter/material.dart';
+import 'package:flutter_web_plugins/flutter_web_plugins.dart'; // This is important
 import 'package:portfolioapp_test/state_mgmt_provider/current_app_state_provider.dart';
 import 'package:portfolioapp_test/state_mgmt_provider/theme_provider.dart';
 import 'package:portfolioapp_test/ui/screens/homepage.dart';
