@@ -1,14 +1,21 @@
 # portfolioapp_test
-**IN PROGRESS**
+**DONE**
+https://portfolio-web-djole.web.app/
 
 This is my Flutter web application hosted on Firebase. The app showcases various features and functionalities, providing  interactive user experience. 
-It includes sections for displaying work experience, education, competitions, and a Pong game embedded within the portfolio.
-This is work in progress, ___now it looks well only on PC's___, be free to see [here] (https://portfolio-web-djole.web.app/)
-![Screencastfrom12 07 2024 222112-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/65921372-086e-4cc8-bdc4-18ae3e2e8c1d)
+It includes sections for displaying work experience, education, competitions, Pong game and my Deezer playlist embedded within the portfolio.
+This is work in progress, ___works well on Chrome,Edge,Firefox (Safari in progress)___, be free to see [here] (https://portfolio-web-djole.web.app/)
+
+![Screencast from 30 07 2024  09-34-47](https://github.com/user-attachments/assets/fcd88d6b-f352-4230-88eb-7ab23a7626ca)
+
+![Screencast from 30 07 2024  09-34-47 (2)](https://github.com/user-attachments/assets/4a3dfdb7-a833-471f-a7e1-25a0f99fa04b)
+note:see homepage.dart to see how i embedded deezerr
+![Screencast from 30 07 2024  09-34-47 (3)](https://github.com/user-attachments/assets/46ccdf4f-6a2b-405a-bed3-3ab0150c3fc3)
+note:see conditional rendering widgets, phone flag in homepage,dart
 
 ## Description
 
-This web app serves as a comprehensive portfolio, highlighting my  achievements, educational background, and competitive accomplishments. 
+This web app serves as a comprehensive portfolio, highlighting my achievements, educational background, and competitive accomplishments. 
 It is designed to be interactive and user-friendly, with a focus on clean design and smooth navigation.
 
 
@@ -26,8 +33,6 @@ It is designed to be interactive and user-friendly, with a focus on clean design
 - `shared_preferences`
 
 ## TO BE ADDED
--fix responsivity on mobile
 -more "apps"
--typos and spelling mistakes
 -possible refactoring code for later versions
 
